@@ -1,0 +1,14 @@
+services:
+  server:
+    build: .
+    command: bash -l -c "npm install && npm run dev"
+    environment:
+      - DATABASE_URL=postgresql://postgres@db/app
+    ports:
+      - 3000:3000 # fastify
+      - 5555:5555 # prisma studio
+    depends_on:
+      - db
+    volumes:
+      - .:/opt/node/app
+      - /opt/node/app/node_modules
