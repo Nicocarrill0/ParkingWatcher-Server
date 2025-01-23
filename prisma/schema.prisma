@@ -36,7 +36,7 @@ model User {
 model Vehicle {
   id           String   @id @default(uuid())
   userID       String
-  licensePlate BigInt   @unique
+  licensePlate String   @unique
   make         String
   model        String
   type         String
