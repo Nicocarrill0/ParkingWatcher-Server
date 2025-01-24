@@ -1,0 +1,2 @@
+server: npm run dev -- --port 3000
+prisma: npx prisma studio
