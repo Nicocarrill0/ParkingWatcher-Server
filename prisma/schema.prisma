@@ -71,21 +71,24 @@ model Payment {
 }
 
 model Street {
-  id          BigInt @id @default(autoincrement())
-  name        BigInt
-  city        BigInt
-  parkingRate BigInt
+  id             BigInt   @id @default(autoincrement())
+  name           BigInt
+  city           BigInt
+  parkingRate    BigInt
+  startTime      DateTime
+  endTime        DateTime
+  amountPaid     Decimal
+  durationLimit  BigInt
+  streetCleaning Boolean
+  latitude       BigInt
+  longitude      BigInt
 
   parkingSpots ParkingSpot[]
 }
 
 model ParkingSpot {
-  id             String  @id @default(uuid())
-  streetID       BigInt
-  latitude       BigInt
-  longitude      BigInt
-  durationLimit  BigInt
-  streetCleaning Boolean
+  id       String @id @default(uuid())
+  streetID BigInt
 
   street          Street           @relation(fields: [streetID], references: [id])
   payments        Payment[]
@@ -97,9 +100,9 @@ model ParkingSession {
   userID        String
   vehicleID     String
   parkingSpotID String
-  startTime     DateTime
-  endTime       DateTime
-  amountPaid    Decimal
+  durationLimit Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   user        User        @relation(fields: [userID], references: [id])
   vehicle     Vehicle     @relation(fields: [vehicleID], references: [id])
