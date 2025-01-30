@@ -3,7 +3,7 @@ export default async function (fastify, opts) {
 
         const {  Price, ParkingLimit, ParkingType, Amenities, RadiusLimit } = request.query;
 
-            return { message: 'Preferences route is working!' };
+    return { message: 'Preferences route is working!' };
     })
 }
 

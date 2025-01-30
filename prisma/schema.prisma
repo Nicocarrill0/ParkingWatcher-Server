@@ -71,17 +71,15 @@ model Payment {
 }
 
 model Street {
-  id             BigInt   @id @default(autoincrement())
-  name           BigInt
-  city           BigInt
-  parkingRate    BigInt
-  startTime      DateTime
-  endTime        DateTime
-  amountPaid     Decimal
-  durationLimit  BigInt
-  streetCleaning Boolean
-  latitude       BigInt
-  longitude      BigInt
+  id            BigInt  @id @default(autoincrement())
+  neighborhood  String
+  days          String
+  startTime     String
+  endTime       String
+  durationLimit String
+  latitude      Decimal
+  longitude     Decimal
+  shape         String
 
   parkingSpots ParkingSpot[]
 }
@@ -101,6 +99,7 @@ model ParkingSession {
   vehicleID     String
   parkingSpotID String
   durationLimit Int
+  amountPaid    Decimal
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
