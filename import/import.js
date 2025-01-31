@@ -13,9 +13,9 @@ const csv = fs.readFileSync('Parking_regulations__except_non-metered_color_curb_
 // Parse the CSV file content into an array of arrays
 const data = csvsync.parse(csv);
 
-for (let i = 1; data.length > 0; ++i) {
+for (let i = 1; data.length > i; ++i) {
   const row = data[i];
-
+  console.log(row);
   const id = row[0];
   const neighborhood = row[37];
   const days = row[3];
