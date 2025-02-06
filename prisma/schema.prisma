@@ -97,9 +97,9 @@ model ParkingSession {
   id            String   @id @default(uuid())
   userID        String
   vehicleID     String
+  neighborhood  String
   parkingSpotID String
   durationLimit Int
-  amountPaid    Decimal
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

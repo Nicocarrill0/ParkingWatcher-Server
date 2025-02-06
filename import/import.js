@@ -53,6 +53,7 @@ for (let i = 1; data.length > i; ++i) {
     }
 
   });
+  console.log(upsertStreet);
 }
 
 console.log(data);
