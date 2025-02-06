@@ -56,7 +56,7 @@ CREATE TABLE "Payment" (
 
 -- CreateTable
 CREATE TABLE "Street" (
-    "id" BIGSERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "neighborhood" TEXT NOT NULL,
     "days" TEXT NOT NULL,
     "startTime" TEXT NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE "Street" (
 -- CreateTable
 CREATE TABLE "ParkingSpot" (
     "id" TEXT NOT NULL,
-    "streetID" BIGINT NOT NULL,
+    "streetID" TEXT NOT NULL,
 
     CONSTRAINT "ParkingSpot_pkey" PRIMARY KEY ("id")
 );
@@ -82,9 +82,9 @@ CREATE TABLE "ParkingSession" (
     "id" TEXT NOT NULL,
     "userID" TEXT NOT NULL,
     "vehicleID" TEXT NOT NULL,
+    "neighborhood" TEXT NOT NULL,
     "parkingSpotID" TEXT NOT NULL,
     "durationLimit" INTEGER NOT NULL,
-    "amountPaid" DECIMAL(65,30) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -71,7 +71,7 @@ model Payment {
 }
 
 model Street {
-  id            BigInt  @id @default(autoincrement())
+  id            String  @id
   neighborhood  String
   days          String
   startTime     String
@@ -86,7 +86,7 @@ model Street {
 
 model ParkingSpot {
   id       String @id @default(uuid())
-  streetID BigInt
+  streetID String
 
   street          Street           @relation(fields: [streetID], references: [id])
   payments        Payment[]

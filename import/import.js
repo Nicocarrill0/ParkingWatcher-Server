@@ -26,6 +26,11 @@ for (let i = 1; data.length > i; ++i) {
   const latitude = 0;
   const longitude = 0;
 
+  /////////////
+  // find center of lat n longitude place it into 0 and store it into lat n long
+  // this is how we select the correct street
+  /////////////
+
   const upsertStreet = await prisma.street.upsert({
     where: {
       id

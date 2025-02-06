@@ -7,15 +7,10 @@ export default async function (fastify, opts) {
       schema: {
         description: 'Returns current streets in the parameter',
         querystring: z.object({
-          id: z.string(),
-          neighborhood: z.string(),
-          days: z.string(),
-          startTime: z.string(),
-          endTime: z.string(),
-          durationLimit: z.string(),
-          latitude: z.number(),
-          longitude: z.number(),
-          shape: z.string(),
+          latitude: z.number().optional(),
+          longitude: z.number().optional(),
+          // distance
+
         }),
       },
       response: {
@@ -31,16 +26,16 @@ export default async function (fastify, opts) {
       }
     },
     async function (request, reply) {
-      const { id, neighborhood, days, startTime, endTime, durationLimit, shape } = request.query;
+      // read prisma documentation
 
-      return { message: 'Preferences route is working!' };
+      // const practice = [{ id: '10012', neighborhood: 'Outer Sunset', days: 'M-F', startTime: '11:00', endTime: '18:00', durationLimit: '8hrs', shape: '0' }];
+
+      const readStreet = await fastify.prisma.street.findMany({
+
+        take: 100
+
+      });
+
+      return readStreet;
     });
 }
-
-//     durationLimit String
-//     latitude      Decimal
-//     longitude     Decimal
-//     shape         String
-//
-//     parkingSpots ParkingSpot[]
-// }
