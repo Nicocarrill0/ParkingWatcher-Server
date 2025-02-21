@@ -12,3 +12,98 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                     String   @id @default(uuid())
+  firstName              String
+  lastName               String
+  email                  String   @unique
+  phoneNumber            String
+  notificationPreference String
+  paymentMethod          String
+  homeAddress            BigInt
+  workLocation           String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  hashedPassword         String
+
+  vehicles        Vehicle[]
+  notifications   Notification[]
+  payments        Payment[]
+  parkingSessions ParkingSession[]
+}
+
+model Vehicle {
+  id           String   @id @default(uuid())
+  userID       String
+  licensePlate String   @unique
+  make         String
+  model        String
+  type         String
+  year         String
+  color        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user            User             @relation(fields: [userID], references: [id])
+  parkingSessions ParkingSession[]
+}
+
+model Notification {
+  id       String   @id @default(uuid())
+  userID   String
+  message  String
+  dateTime DateTime @default(now())
+
+  user User @relation(fields: [userID], references: [id])
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  userID        String
+  amount        BigInt
+  dateTime      DateTime @default(now())
+  paymentMethod String
+  parkingSpotID String
+
+  user        User        @relation(fields: [userID], references: [id])
+  parkingSpot ParkingSpot @relation(fields: [parkingSpotID], references: [id])
+}
+
+model Street {
+  id            String  @id
+  neighborhood  String
+  days          String
+  startTime     String
+  endTime       String
+  durationLimit String
+  latitude      Decimal
+  longitude     Decimal
+  shape         String
+
+  parkingSpots ParkingSpot[]
+}
+
+model ParkingSpot {
+  id       String @id @default(uuid())
+  streetID String
+
+  street          Street           @relation(fields: [streetID], references: [id])
+  payments        Payment[]
+  parkingSessions ParkingSession[]
+}
+
+model ParkingSession {
+  id            String   @id @default(uuid())
+  userID        String
+  vehicleID     String
+  neighborhood  String
+  parkingSpotID String
+  durationLimit Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User        @relation(fields: [userID], references: [id])
+  vehicle     Vehicle     @relation(fields: [vehicleID], references: [id])
+  parkingSpot ParkingSpot @relation(fields: [parkingSpotID], references: [id])
+}
