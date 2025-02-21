@@ -28,7 +28,6 @@ export default async function (fastify, opts) {
     async function (request, reply) {
       // read prisma documentation
 
-      // const practice = [{ id: '10012', neighborhood: 'Outer Sunset', days: 'M-F', startTime: '11:00', endTime: '18:00', durationLimit: '8hrs', shape: '0' }];
 
       const readStreet = await fastify.prisma.street.findMany({
 

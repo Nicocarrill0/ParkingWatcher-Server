@@ -13,9 +13,43 @@ const csv = fs.readFileSync('Parking_regulations__except_non-metered_color_curb_
 // Parse the CSV file content into an array of arrays
 const data = csvsync.parse(csv);
 
-for (let i = 1; data.length > i; ++i) {
+function parseCenter (shape) {
+  if (!shape || !shape.includes('MULTILINESTRING')) {
+    return { latitude: 0, longitude: 0 };
+  }
+
+  const matches = shape.match(/\(\((.*?)\)\)/);
+  if (!matches || !matches[1]) {
+    return { latitude: 0, longitude: 0 };
+  }
+
+  const coords = matches[1]
+    .trim()
+    .split(',') // splitting both points of line, or lines
+    .map(coord => { // iterate through coordinates
+      const parts = coord.trim().split(/\s+/);
+      if (parts.length < 2) return null;
+      const lon = parseFloat(parts[0]);
+      const lat = parseFloat(parts[1]);
+      return isNaN(lat) || isNaN(lon) ? null : { lat, lon };
+    })
+    .filter(Boolean);
+
+  if (coords.length < 2) {
+    return { latitude: 0, longitude: 0 };
+  }
+
+  const first = coords[0]; // fist n last coordinates
+  const last = coords[coords.length - 1];
+
+  return {
+    latitude: (first.lat + last.lat) / 2,
+    longitude: (first.lon + last.lon) / 2
+  };
+}
+
+for (let i = 1; i < data.length; ++i) {
   const row = data[i];
-  console.log(row);
   const id = row[0];
   const neighborhood = row[37];
   const days = row[3];
@@ -23,42 +57,14 @@ for (let i = 1; data.length > i; ++i) {
   const endTime = row[6];
   const durationLimit = row[21];
   const shape = row[35];
-  const latitude = 0;
-  const longitude = 0;
 
-  /////////////
-  // find center of lat n longitude place it into 0 and store it into lat n long
-  // this is how we select the correct street
-  /////////////
+  const { latitude, longitude } = parseCenter(shape);
 
   const upsertStreet = await prisma.street.upsert({
-    where: {
-      id
-    },
-    update: {
-      neighborhood,
-      days,
-      startTime,
-      endTime,
-      durationLimit,
-      shape,
-      latitude,
-      longitude,
-    },
-    create: {
-      id,
-      neighborhood,
-      days,
-      startTime,
-      endTime,
-      durationLimit,
-      shape,
-      latitude,
-      longitude,
-    }
-
+    where: { id },
+    update: { neighborhood, days, startTime, endTime, durationLimit, shape, latitude, longitude },
+    create: { id, neighborhood, days, startTime, endTime, durationLimit, shape, latitude, longitude }
   });
+
   console.log(upsertStreet);
 }
-
-console.log(data);
