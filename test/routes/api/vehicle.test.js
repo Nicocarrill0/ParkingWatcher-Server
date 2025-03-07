@@ -9,7 +9,7 @@ test('/api/vehicle', async (t) => {
 
   await t.test('POST /vehicle', async (t) => {
     await t.test('returns bad request if required fields are missing', async (t) => {
-      const response = await app.inject().post('/vehicle').payload({
+      const response = await app.inject().post('/api/user/vehicle').payload({
         // Missing required fields like license or make
         model: 'CX-5',
         year: '2018',
@@ -21,7 +21,7 @@ test('/api/vehicle', async (t) => {
     });
 
     await t.test('returns ok if vehicle is successfully uploaded', async (t) => {
-      const response = await app.inject().post('/vehicle').payload({
+      const response = await app.inject().post('/api/user/vehicle').payload({
         license: '8EIS147',
         make: 'Mazda',
         model: 'CX-5',

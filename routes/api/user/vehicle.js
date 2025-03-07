@@ -1,5 +1,5 @@
 export default async function (fastify, opts) {
-  fastify.post('/cars', {
+  fastify.post('/vehicle', {
     schema: {
       body: {
         type: 'object',

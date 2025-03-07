@@ -20,10 +20,36 @@ export default async function (fastify, opts) {
         })
       }
     },
-    handler: async function (request, reply) { // Added 'handler' here
-      const { Email, Password } = request.body;
+    handler: async function (request, reply) {
+      const { firstName, lastName, email, password, confirmPassword } = request.body;
 
-      return { message: 'Sign-Up route is working!' };
+      if (password !== confirmPassword) {
+        return reply.status(StatusCodes.UNAUTHORIZED).send();
+      }
+
+      const existingUser = await fastify.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingUser) {
+        return reply.status(StatusCodes.CONFLICT).send({
+          message: 'Email already exists',
+        });
+      }
+
+      const user = await fastify.prisma.user.create({
+        data: {
+          firstName: 'Jane',
+          lastName: 'Smith',
+          email: 'jane.smith@test.com',
+        },
+      });
+      return reply.send({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
     }
   });
 }

@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export default async function (fastify, opts) {
   fastify.post('/signin', {
@@ -10,17 +11,28 @@ export default async function (fastify, opts) {
       }),
       response: {
         [StatusCodes.OK]: z.object({
-          userId: z.string(),
+          id: z.string(),
           firstName: z.string(),
           lastName: z.string(),
           email: z.string(),
         })
       }
     },
-    handler: async function (request, reply) { // Changed function placement to 'handler'
+    handler: async function (request, reply) {
       const { email, password } = request.body;
 
-      return { message: 'Sign-In route is working!' };
+      //! !!
+      const user = await fastify.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (user) {
+        if (await bcrypt.compare(password, user.hashedPassword)) {
+          return user;
+        }
+      }
+
+      return reply.status(StatusCodes.UNAUTHORIZED).send();
     }
   });
 }

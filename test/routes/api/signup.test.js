@@ -9,22 +9,18 @@ test('/api/signup', async (t) => {
 
   await t.test('POST /signup', async (t) => {
     await t.test('returns bad request if required fields are missing', async (t) => {
-      const response = await app.inject().post('/signup').payload({
-        email: 'user@example.com',
-        password: 'password123',
-        confirmPassword: 'password123',
-        // Missing firstName and lastName
+      const response = await app.inject().post('/api/user/signup').payload({
       });
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.BAD_REQUEST);
     });
 
     await t.test('returns bad request if passwords do not match', async (t) => {
-      const response = await app.inject().post('/signup').payload({
+      const response = await app.inject().post('/api/user/signup').payload({
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane@example.com',
-        password: 'password123',
+        password: 'test',
         confirmPassword: 'differentpassword',
       });
 
@@ -32,19 +28,19 @@ test('/api/signup', async (t) => {
     });
 
     await t.test('returns ok with user data on success', async (t) => {
-      const response = await app.inject().post('/signup').payload({
+      const response = await app.inject().post('/api/user/signup').payload({
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane@example.com',
-        password: 'password123',
-        confirmPassword: 'password123',
+        password: 'test',
+        confirmPassword: 'test',
       });
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
 
       const data = await response.json();
       assert.deepStrictEqual(data, {
-        userId: data.userId, // Assuming backend generates this
+        userId: data.userId,
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane@example.com',

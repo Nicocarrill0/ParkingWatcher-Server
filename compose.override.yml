@@ -12,3 +12,6 @@ services:
     volumes:
       - .:/opt/node/app
       - /opt/node/app/node_modules
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - parkingWatcher
