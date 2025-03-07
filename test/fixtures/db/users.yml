@@ -1,0 +1,20 @@
+entity: user
+items:
+  user1:
+    id: 555740af-17e9-48a3-93b8-d5236dfd2c29
+    firstName: John
+    lastName: Doe
+    email: john.doe@test.com
+    address: ''
+    phoneNumber: '415-555-1234'
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    createdAt: '2024-12-27T08:53:41-07:00'
+  user2:
+    id: dab5dff3-360d-4dbb-98dd-1990dfb5c4c5
+    firstName: Jane
+    lastName: Smith
+    email: jane.smith@test.com
+    address: ''
+    phoneNumber: '415-555-1235'
+    hashedPassword: $2b$10$ICaCk3VVZUCtO9HySahquuQusQhEnRpXHdzxaceUUJPk0DTwN2e/W # test
+    createdAt: '2024-12-27T09:53:41-07:00'
