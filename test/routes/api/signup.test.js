@@ -35,13 +35,12 @@ test('/api/signup', async (t) => {
         password: 'test',
         confirmPassword: 'test',
       });
-      console.log(response.body);
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
 
       const data = await response.json();
       assert.deepStrictEqual(data, {
-        userId: data.userId,
+        id: data.id,
         firstName: 'Jane',
         lastName: 'Doe',
         email: 'jane@example.com',

@@ -14,7 +14,7 @@ export default async function (fastify, opts) {
       }),
       response: {
         [StatusCodes.OK]: z.object({
-          userId: z.string(),
+          id: z.string(),
           firstName: z.string(),
           lastName: z.string(),
           email: z.string(),
@@ -26,15 +26,6 @@ export default async function (fastify, opts) {
 
       if (password !== confirmPassword) {
         return reply.status(StatusCodes.UNAUTHORIZED).send();
-      }
-
-      if (process.env.NODE_ENV === 'test') {
-        return reply.send({
-          userId: 'dab5dff3-360d-4dbb-98dd-1990dfb5c4c5',
-          firstName: 'Jane',
-          lastName: 'Smith',
-          email: 'jane.smith@test.com',
-        });
       }
 
       const existingUser = await fastify.prisma.user.findUnique({
@@ -58,12 +49,9 @@ export default async function (fastify, opts) {
         },
       });
 
-      return reply.send({
-        userId: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      });
+      return reply.send(
+        user
+      );
     },
   });
 }

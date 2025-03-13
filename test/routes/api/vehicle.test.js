@@ -10,7 +10,7 @@ test('/api/vehicle', async (t) => {
   await t.test('POST /vehicle', async (t) => {
     await t.test('returns bad request if required fields are missing', async (t) => {
       const response = await app.inject().post('/api/user/vehicle').payload({
-        // Missing required fields like license or make
+        // Missing required fields like license or make this on pupose
         model: 'CX-5',
         year: '2018',
         type: 'SUV',
@@ -29,14 +29,14 @@ test('/api/vehicle', async (t) => {
         type: 'SUV',
         color: 'Blue'
       });
-
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
+      console.log(response.body);
 
       const data = await response.json();
       assert.deepStrictEqual(data, {
         message: 'Vehicle uploaded successfully!',
         vehicle: {
-          id: data.vehicle.id, // Assuming the backend generates an ID
+          id: data.vehicle.id,
           license: '8EIS147',
           make: 'Mazda',
           model: 'CX-5',
