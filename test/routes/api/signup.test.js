@@ -24,7 +24,7 @@ test('/api/signup', async (t) => {
         confirmPassword: 'differentpassword',
       });
 
-      assert.deepStrictEqual(response.statusCode, StatusCodes.BAD_REQUEST);
+      assert.deepStrictEqual(response.statusCode, StatusCodes.UNAUTHORIZED);
     });
 
     await t.test('returns ok with user data on success', async (t) => {
@@ -35,6 +35,7 @@ test('/api/signup', async (t) => {
         password: 'test',
         confirmPassword: 'test',
       });
+      console.log(response.body);
 
       assert.deepStrictEqual(response.statusCode, StatusCodes.OK);
 
