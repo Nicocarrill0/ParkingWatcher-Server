@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 
 export default async function (fastify, opts) {
   fastify.post('/signup', {
@@ -13,17 +14,44 @@ export default async function (fastify, opts) {
       }),
       response: {
         [StatusCodes.OK]: z.object({
-          userId: z.string(),
+          id: z.string(),
           firstName: z.string(),
           lastName: z.string(),
           email: z.string(),
-        })
-      }
+        }),
+      },
     },
-    handler: async function (request, reply) { // Added 'handler' here
-      const { Email, Password } = request.body;
+    handler: async function (request, reply) {
+      const { firstName, lastName, email, password, confirmPassword } = request.body;
 
-      return { message: 'Sign-Up route is working!' };
-    }
+      if (password !== confirmPassword) {
+        return reply.status(StatusCodes.UNAUTHORIZED).send();
+      }
+
+      const existingUser = await fastify.prisma.user.findUnique({
+        where: { email },
+      });
+
+      if (existingUser) {
+        return reply.status(StatusCodes.CONFLICT).send({
+          message: 'Email already exists',
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await fastify.prisma.user.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          hashedPassword,
+        },
+      });
+
+      return reply.send(
+        user
+      );
+    },
   });
 }
